@@ -8,7 +8,7 @@ Replaces: us.hackulo.appsync50, net.angelxwind.appsyncunified
 Package: ai.akemi.appsyncunified
 Name: AppSync Unified
 Version: 116.0
-Architecture: iphoneos-arm
+Architecture: iphoneos-arm64
 Description: Enables the ability to install unsigned/fakesigned iOS applications.
 Section: Tweaks
 Author: Karen/あけみ, Linus Yang <karen@akemi.ai>

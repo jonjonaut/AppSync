@@ -1,0 +1,53 @@
+name: AppSync Unified 
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build AppSync
+    runs-on: macos-15
+
+    
+    steps:
+      - name: Checkout AppSync
+        uses: actions/checkout@v4
+        with:
+          path: main
+
+      - name: dependencies
+        run: brew install make ldid curl
+
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1.6.0
+        with:
+          xcode-version: "26.0"
+      
+      - name: Setup Theos
+        run: |
+          git clone --recursive https://github.com/theos/theos ~/theos
+          cd ~/theos
+          curl -sSL https://github.com/theos/sdks/releases/download/master-146e41f/iPhoneOS16.5.sdk.tar.xz | tar -xJv -C ~/theos/sdks
+          chmod +x ./bin/install-theos
+          ./bin/install-theos
+          
+
+      - name: Build deb
+        run: |
+          export THEOS=~/theos THEOS_PACKAGE_SCHEME=rootless
+          cd main && make
+          make package
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: AppSync deb
+          path: main/debs/*.deb
+
+
+
+
+      
